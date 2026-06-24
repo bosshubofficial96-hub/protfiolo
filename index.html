@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lermet AI — Advanced Animated</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#05060f',
+                        ink: '#e6e8ff',
+                        brand: { 500: '#6366f1', 600: '#7c3aed', cyan: '#22d3ee' },
+                    },
+                    backgroundImage: {
+                        'lermet-gradient': 'linear-gradient(135deg,#22d3ee 0%,#6366f1 50%,#a855f7 100%)',
+                    },
+                    boxShadow: {
+                        glow: '0 0 60px -10px rgba(124,58,237,.55)',
+                    },
+                    animation: {
+                        'float-slow': 'float 9s ease-in-out infinite',
+                        shimmer: 'shimmer 2.4s linear infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-14px)' } },
+                        shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+                        pulseGlow: { '0%,100%': { opacity: 0.3 }, '50%': { opacity: 0.8 } },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* --- base --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html,
+        body {
+            background: #05060f;
+            color: #e6e8ff;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 10px;
+        }
+
+        /* --- glass --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+        }
+        .grad-text {
+            background: linear-gradient(135deg, #22d3ee 0%, #6366f1 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 12px;
+            font-weight: 500;
+            color: #fff;
+            background: linear-gradient(135deg, #22d3ee 0%, #6366f1 50%, #a855f7 100%);
+            box-shadow: 0 0 60px -10px rgba(124, 58, 237, 0.55);
+            transition: all 0.25s;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 80px -5px rgba(124, 58, 237, 0.7);
+        }
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: transparent;
+            transition: all 0.25s;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
+        }
+
+        /* --- background --- */
+        .neural-bg {
+            background:
+                radial-gradient(60% 50% at 20% 30%, rgba(99, 102, 241, 0.35), transparent 60%),
+                radial-gradient(50% 40% at 80% 20%, rgba(34, 211, 238, 0.25), transparent 60%),
+                radial-gradient(70% 60% at 60% 90%, rgba(168, 85, 247, 0.30), transparent 60%),
+                #05060f;
+        }
+        .grid-overlay {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
+            pointer-events: none;
+        }
+
+        /* --- floating orbs --- */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+            will-change: transform;
+            animation: orbFloat 10s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 320px;
+            height: 320px;
+            background: #22d3ee;
+            top: 8%;
+            left: 75%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 280px;
+            height: 280px;
+            background: #6366f1;
+            bottom: 20%;
+            left: 5%;
+            animation-delay: 2.5s;
+        }
+        .orb-3 {
+            width: 360px;
+            height: 360px;
+            background: #a855f7;
+            top: 50%;
+            left: 40%;
+            animation-delay: 5s;
+        }
+        .orb-4 {
+            width: 200px;
+            height: 200px;
+            background: #06b6d4;
+            top: 70%;
+            left: 85%;
+            animation-delay: 7.5s;
+        }
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(30px, -30px) scale(1.1);
+            }
+        }
+
+        /* --- reveal animations (scroll) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+        .reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+        .reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        /* --- sidebar transition --- */
+        .sidebar-transition {
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- markdown content --- */
+        .markdown-content p {
+            margin: 0.5em 0;
+        }
+        .markdown-content ul,
+        .markdown-content ol {
+            padding-left: 1.5rem;
+            margin: 0.5em 0;
+        }
+        .markdown-content blockquote {
+            border-left: 3px solid #6366f1;
+            padding-left: 1rem;
+            margin: 0.5em 0;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .markdown-content pre {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 0.5em 0;
+        }
+        .markdown-content code {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        /* --- typing indicator --- */
+        .typing-dots span {
+            animation: dotPulse 1.4s infinite both;
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 0 2px;
+        }
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes dotPulse {
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <!-- React + ReactDOM + Babel standalone -->
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js">
+    </script>
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js">
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback, useMemo, createContext, useContext } = React;
+
+        // ─── Icons ───────────────────────────────────────────────────────────
+        const Icons = {
+            ChevronDown: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" /></svg>,
+            Sparkles: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z" /><path d="M12 15v6" /><path d="M9 18h6" /></svg>,
+            ArrowRight: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>,
+            Check: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" /></svg>,
+            MessagesSquare: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>,
+            Bot: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><path d="M12 8V4M8 12h.01M16 12h.01M12 16v4M4 12h4M16 12h4M8 8h8M8 16h8" /><circle cx="12" cy="12" r="10" /></svg>,
+            BookOpen: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>,
+            Code2: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>,
+            KeyRound: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><circle cx="9" cy="15" r="3" /><path d="M14 10l4-4M18 6l-4 4" /><path d="M9 12l4 4" /></svg>,
+            Settings: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" /></svg>,
+            ChevronLeft: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" /></svg>,
+            Send: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>,
+            Activity: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>,
+            Workflow: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="6" height="6" rx="1" /><rect x="16" y="16" width="6" height="6" rx="1" /><rect x="16" y="2" width="6" height="6" rx="1" /><line x1="8" y1="5" x2="16" y2="5" /><line x1="19" y1="8" x2="19" y2="16" /><line x1="5" y1="8" x2="5" y2="16" /></svg>,
+            Brain: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><path d="M12 4a4 4 0 0 1 4 4c0 1.5-.6 2.8-1.5 3.8A4 4 0 0 1 16 15a4 4 0 0 1-4 4 4 4 0 0 1-4-4c0-1.4.6-2.7 1.5-3.7A4 4 0 0 1 8 8a4 4 0 0 1 4-4z" /><path d="M12 8v8" /><path d="M8 12h8" /></svg>,
+            FileText: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>,
+            Network: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1" /><rect x="2" y="16" width="6" height="6" rx="1" /><rect x="9" y="2" width="6" height="6" rx="1" /><line x1="5" y1="16" x2="12" y2="8" /><line x1="19" y1="16" x2="12" y2="8" /></svg>,
+            Image: (p) => <svg {...p} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                strokeLinejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>,
+        };
+
+        // ─── Logo ─────────────────────────────────────────────────────────────
+        const Logo = ({ size = 36 }) => {
+            return ( <
+                div className = "flex items-center gap-2" >
+                <
+                svg width = { size }
+                height = { size }
+                viewBox = "0 0 64 64" >
+                <
+                defs >
+                <
+                linearGradient id = "lg"
+                x1 = "0"
+                x2 = "1"
+                y1 = "0"
+                y2 = "1" >
+                <
+                stop offset = "0%"
+                stopColor = "#22d3ee" />
+                <
+                stop offset = "50%"
+                stopColor = "#6366f1" />
+                <
+                stop offset = "100%"
+                stopColor = "#a855f7" />
+                <
+                /linearGradient> <
+                /defs> <
+                path d = "M10 14h22a14 14 0 0 1 14 14v22H24A14 14 0 0 1 10 36z"
+                fill = "url(#lg)"
+                opacity = "0.22" / >
+                <
+                path d = "M18 22c6-4 14-4 20 0M18 32c6-4 14-4 20 0M18 42c6-4 14-4 20 0"
+                stroke = "url(#lg)"
+                strokeWidth = "2.5"
+                fill = "none"
+                strokeLinecap = "round" / >
+                <
+                circle cx = "46"
+                cy = "18"
+                r = "3"
+                fill = "#22d3ee" / >
+                <
+                circle cx = "52"
+                cy = "30"
+                r = "2"
+                fill = "#a855f7" / >
+                <
+                /svg> <
+                span className = "text-lg font-semibold tracking-tight" >
+                Lermet < span className = "grad-text" > AI < /span> <
+                /span> <
+                /div>
+            );
+        };
+
+        // ─── Scroll Reveal Hook ────────────────────────────────────────────
+        const useReveal = () => {
+            const ref = useRef(null);
+            useEffect(() => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, { threshold: 0.15 });
+                const el = ref.current;
+                if (el) observer.observe(el);
+                return () => { if (el) observer.unobserve(el); };
+            }, []);
+            return ref;
+        };
+
+        // ─── Landing Components ────────────────────────────────────────────
+
+        const Nav = ({ setPage }) => {
+            return ( <
+                header className = "sticky top-0 z-30 backdrop-blur-xl bg-[#05060f]/60 border-b border-white/10" >
+                <
+                div className = "max-w-6xl mx-auto px-6 py-3 flex items-center justify-between" >
+                <
+                a href = "#"
+                onClick = {
+                    (e) => { e.preventDefault();
+                        setPage('landing'); } } >
+                <
+                Logo / >
+                <
+                /a> <
+                nav className = "hidden md:flex items-center gap-7 text-sm text-white/70" >
+                <
+                a href = "#"
+                onClick = {
+                    (e) => { e.preventDefault();
+                        document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' }); } } >
+                Features < /a> <
+                a href = "#"
+                onClick = {
+                    (e) => { e.preventDefault();
+                        document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' }); } } >
+                Pricing < /a> <
+                a href = "#"
+                onClick = {
+                    (e) => { e.preventDefault();
+                        document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' }); } } >
+                FAQ < /a> <
+                /nav> <
+                div className = "flex items-center gap-2" >
+                <
+                button className = "text-sm text-white/80 hover:text-white px-3 py-2"
+                onClick = {
+                    () => setPage('login') } >
+                Login < /button> <
+                button className = "btn-primary text-sm py-2"
+                onClick = {
+                    () => setPage('signup') } >
+                Get started < /button> <
+                /div> <
+                /div> <
+                /header>
+            );
+        };
+
+        const Hero = ({ setPage }) => {
+            return ( <
+                section className = "relative overflow-hidden neural-bg min-h-[90vh] flex items-center" >
+                <
+                div className = "absolute inset-0 grid-overlay" />
+                <
+                div className = "orb orb-1" > < /div> <
+                div className = "orb orb-2" > < /div> <
+                div className = "orb orb-3" > < /div> <
+                div className = "orb orb-4" > < /div>
+
+                <
+                div className = "relative max-w-6xl mx-auto px-6 py-20 text-center" >
+                <
+                div className = "inline-flex items-center gap-2 glass px-3 py-1 text-xs text-white/70 mb-6 animate-pulse-glow" >
+                <
+                Icons.Sparkles className = "h-3.5 w-3.5 text-brand-cyan" />
+                The Future of Intelligent Creation
+                <
+                /div> <
+                h1 className = "text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05]" >
+                Build, Learn and Create < br / >
+                <
+                span className = "grad-text" > with AI. < /span> <
+                /h1> <
+                p className = "mt-6 text-lg md:text-xl text-white/65 max-w-2xl mx-auto" >
+                Lermet AI unifies chat, agents, study, coding, image and an API platform into one
+                futuristic workspace — designed for builders and learners.
+                <
+                /p> <
+                div className = "mt-10 flex flex-wrap items-center justify-center gap-3" >
+                <
+                button className = "btn-primary" onClick = {
+                    () => setPage('signup') } >
+                Start free < Icons.ArrowRight className = "h-4 w-4" />
+                <
+                /button> <
+                button className = "btn-ghost" onClick = {
+                    () => setPage('dashboard') } >
+                Open dashboard
+                <
+                /button> <
+                /div> <
+                /div> <
+                /section>
+            );
+        };
+
+        const Features = () => {
+            const items = [
+                { icon: Icons.MessagesSquare, title: 'AI Chat', desc: 'Streaming chat with memory, files, voice and code.' },
+                { icon: Icons.Bot, title: 'AI Agents', desc: 'Custom agents, marketplace and multi-agent runs.' },
+                { icon: Icons.BookOpen, title: 'Study AI', desc: 'Notes, quizzes, flashcards and PDF analysis.' },
+                { icon: Icons.Code2, title: 'Coding AI', desc: 'Generate, debug and explain in any language.' },
+                { icon: Icons.Image, title: 'Image Gen', desc: 'Create on-brand visuals from a prompt.' },
+                { icon: Icons.KeyRound, title: 'API Platform', desc: 'Issue keys, meter usage, ship to production.' },
+                { icon: Icons.Workflow, title: 'Workflows', desc: 'Compose agents into reliable automations.' },
+                { icon: Icons.Brain, title: 'Memory', desc: 'A long-term graph that learns with the user.' },
+                { icon: Icons.FileText, title: 'Knowledge Base', desc: 'RAG over your docs, sites and uploads.' },
+                { icon: Icons.Network, title: 'Realtime Collab', desc: 'Workspaces, sharing and team analytics.' },
+            ];
+
+            return ( <
+                section id = "features"
+                className = "py-28 px-6 relative" >
+                <
+                div className = "max-w-6xl mx-auto" >
+                <
+                div className = "text-center reveal"
+                ref = { useReveal() } >
+                <
+                h2 className = "text-3xl md:text-5xl font-semibold tracking-tight" >
+                Ten products. < span className = "grad-text" > One workspace. < /span> <
+                /h2> <
+                p className = "text-white/60 mt-3 max-w-2xl mx-auto" >
+                A modular suite that scales from a single chat to enterprise - grade AI infrastructure.
+                <
+                /p> <
+                /div> <
+                div className = "mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-4" > {
+                    items.map((f, i) => {
+                        const ref = useReveal();
+                        return ( <
+                            div key = { f.title }
+                            className = { `glass p-6 hover:bg-white/[0.07] transition group reveal reveal-delay-${i % 3 + 1}` }
+                            ref = { ref } >
+                            <
+                            div className = "h-10 w-10 rounded-xl bg-lermet-gradient grid place-items-center shadow-glow animate-float-slow" >
+                            <
+                            f.icon className = "h-5 w-5 text-white" />
+                            <
+                            /div> <
+                            h3 className = "mt-4 text-lg font-medium" > { f.title } < /h3> <
+                            p className = "text-white/60 text-sm mt-1" > { f.desc } < /p> <
+                            /div>
+                        );
+                    })
+                } <
+                /div> <
+                /div> <
+                /section>
+            );
+        };
+
+        const Pricing = ({ setPage }) => {
+            const tiers = [
+                { name: 'Free', price: '$0', desc: 'Try everything.', features: ['50 chats / mo', 'Basic agents', 'Community'],
+                    cta: 'Start free', featured: false },
+                { name: 'Pro', price: '$19', desc: 'For builders.', features: ['Unlimited chat', 'Custom agents', 'Image gen',
+                        'API keys'
+                    ], cta: 'Go Pro', featured: true },
+                { name: 'Team', price: '$49', desc: 'Collaborate.', features: ['Seats & workspaces', 'Shared memory',
+                        'Admin panel', 'Priority support'
+                    ], cta: 'Contact sales', featured: false },
+            ];
+            return ( <
+                section id = "pricing"
+                className = "py-28 px-6" >
+                <
+                div className = "max-w-6xl mx-auto" >
+                <
+                div className = "text-center reveal"
+                ref = { useReveal() } >
+                <
+                h2 className = "text-3xl md:text-5xl font-semibold tracking-tight" >
+                Pricing that scales with you
+                <
+                /h2> <
+                /div> <
+                div className = "mt-14 grid md:grid-cols-3 gap-5" > {
+                    tiers.map((t, idx) => {
+                        const ref = useReveal();
+                        return ( <
+                            div key = { t.name }
+                            className = { `p-7 reveal reveal-delay-${idx % 3 + 1} ${t.featured ? 'glass-strong shadow-glow ring-1 ring-brand-500/40' : 'glass'}` }
+                            ref = { ref } >
+                            { t.featured &&
+                                    < div className = "text-xs uppercase tracking-wider grad-text mb-2" > Most popular < /div>} <
+                                    div className = "text-sm text-white/60" > { t.name } < /div> <
+                                    div className = "mt-2 text-4xl font-semibold" > { t.price } < span className =
+                                    "text-base text-white/50" > / mo < /span></div >
+                                    <
+                                    p className = "text-white/60 mt-1" > { t.desc } < /p> <
+                                    ul className = "mt-6 space-y-2 text-sm" > {
+                                        t.features.map(f => ( <
+                                            li key = { f }
+                                            className = "flex items-center gap-2 text-white/80" >
+                                            <
+                                            Icons.Check className = "h-4 w-4 text-brand-cyan" /> { f } <
+                                            /li>
+                                        ))
+                                    } <
+                                    /ul> <
+                                    button className = { `mt-7 inline-flex w-full justify-center ${t.featured ? 'btn-primary' : 'btn-ghost'}` }
+                                    onClick = {
+                                        () => setPage('signup') } >
+                                    { t.cta } <
+                                    /button> <
+                                    /div>
+                                );
+                            })
+                        } <
+                        /div> <
+                        /div> <
+                        /section>
+                    );
+                };
+
+                const Testimonials = () => {
+                    const quotes = [
+                        { who: 'Aanya, founder', text: 'Replaced four tools. Our team ships faster than ever.' },
+                        { who: 'Marco, CS student', text: 'Study AI built my exam prep in an afternoon.' },
+                        { who: 'Lin, indie dev', text: 'The API platform is exactly what I needed to launch.' },
+                    ];
+                    return ( <
+                        section className = "py-28 px-6" >
+                        <
+                        div className = "max-w-6xl mx-auto grid md:grid-cols-3 gap-5" > {
+                            quotes.map((q, idx) => {
+                                const ref = useReveal();
+                                return ( <
+                                    div key = { q.who }
+                                    className = { `glass p-6 reveal reveal-delay-${idx + 1}` }
+                                    ref = { ref } >
+                                    <
+                                    p className = "text-white/85" > "{ q.text }" < /p> <
+                                    div className = "mt-4 text-sm text-white/55" > — { q.who } < /div> <
+                                    /div>
+                                );
+                            })
+                        } <
+                        /div> <
+                        /section>
+                    );
+                };
+
+                const FAQ = () => {
+                    const faqs = [
+                        { q: 'Is Lermet AI free to try?', a: 'Yes — the Free plan includes everything you need to evaluate.' },
+                        { q: 'Which models does it use?', a: 'Any OpenAI-compatible model via the Vercel AI SDK, including local gateways.' },
+                        { q: 'Can I bring my own data?', a: 'Yes. Upload documents, connect a website or push data via the API.' },
+                        { q: 'Do you offer team workspaces?', a: 'Team and Enterprise plans include workspaces, RBAC and admin analytics.' },
+                    ];
+                    const [open, setOpen] = useState(0);
+                    return ( <
+                        section id = "faq"
+                        className = "py-28 px-6" >
+                        <
+                        div className = "max-w-3xl mx-auto" >
+                        <
+                        div className = "text-center reveal"
+                        ref = { useReveal() } >
+                        <
+                        h2 className = "text-3xl md:text-5xl font-semibold tracking-tight mb-10" > FAQ < /h2> <
+                        /div> <
+                        div className = "space-y-3" > {
+                            faqs.map((f, i) => ( <
+                                button key = { f.q }
+                                onClick = {
+                                    () => setOpen(open === i ? null : i) }
+                                className = "glass w-full text-left p-5 hover:bg-white/[0.07] transition reveal"
+                                ref = { useReveal() } >
+                                <
+                                div className = "flex items-center justify-between" >
+                                <
+                                span className = "font-medium" > { f.q } < /span> <
+                                Icons.ChevronDown className = { `h-4 w-4 transition ${open === i ? 'rotate-180' : ''}` }
+                                /> <
+                                /div> {
+                                    open === i && < p className = "mt-2 text-white/65" > { f.a } < /p>} <
+                                    /button>
+                                ))
+                            } <
+                            /div> <
+                            /div> <
+                            /section>
+                        );
+                    };
+
+                    const Footer = () => {
+                        return ( <
+                            footer className = "border-t border-white/10 py-10 px-6" >
+                            <
+                            div className = "max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4" >
+                            <
+                            Logo size = { 28 }
+                            /> <
+                            div className = "text-sm text-white/50" > © { new Date().getFullYear() } Lermet AI · The Future of
+                            Intelligent Creation < /div> <
+                            /div> <
+                            /footer>
+                        );
+                    };
+
+                    const LandingPage = ({ setPage }) => {
+                        return ( <
+                            >
+                            <
+                            Nav setPage = { setPage }
+                            /> <
+                            Hero setPage = { setPage }
+                            /> <
+                            Features / >
+                            <
+                            Pricing setPage = { setPage }
+                            /> <
+                            Testimonials / >
+                            <
+                            FAQ / >
+                            <
+                            Footer / >
+                            <
+                            />
+                        );
+                    };
+
+                    // ─── Dashboard ──────────────────────────────────────────────────────────
+
+                    const Sidebar = ({ currentPage, setPage, open, setOpen }) => {
+                        const nav = [
+                            { href: 'dashboard', label: 'Overview', icon: Icons.Activity },
+                            { href: 'chat', label: 'Chat', icon: Icons.MessagesSquare },
+                            { href: 'agents', label: 'Agents', icon: Icons.Bot },
+                            { href: 'study', label: 'Study', icon: Icons.BookOpen },
+                            { href: 'coding', label: 'Coding', icon: Icons.Code2 },
+                            { href: 'api', label: 'API', icon: Icons.KeyRound },
+                            { href: 'settings', label: 'Settings', icon: Icons.Settings },
+                        ];
+                        const isActive = (href) => {
+                            if (href === 'dashboard') return currentPage === 'dashboard';
+                            return currentPage === href;
+                        };
+                        return ( <
+                            aside className = { `h-screen sticky top-0 border-r border-white/10 bg-white/[0.02] backdrop-blur-xl sidebar-transition ${open ? 'w-64' : 'w-[72px]'}` } >
+                            <
+                            div className = "flex items-center justify-between p-4" > {
+                                open ? < Logo size = { 28 }
+                                /> : < Logo size = { 24 }
+                                />} <
+                                button onClick = {
+                                    () => setOpen(!open) }
+                                className = "text-white/60 hover:text-white" >
+                                <
+                                Icons.ChevronLeft className = { `h-4 w-4 transition ${!open ? 'rotate-180' : ''}` }
+                                /> <
+                                /button> <
+                                /div> <
+                                nav className = "px-2 py-2 space-y-1" > {
+                                    nav.map(item => {
+                                        const active = isActive(item.href);
+                                        return ( <
+                                            button key = { item.href }
+                                            onClick = {
+                                                () => setPage(item.href) }
+                                            className = { `flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition w-full ${active ? 'bg-lermet-gradient text-white shadow-glow' : 'text-white/70 hover:bg-white/5'}` } >
+                                            <
+                                            item.icon className = "h-4 w-4 shrink-0" />
+                                            {
+                                                open && < span > { item.label } < /span>} <
+                                                /button>
+                                            );
+                                        })
+                                    } <
+                                    /nav> <
+                                    /aside>
+                                );
+                            };
+
+                            const DashboardHome = ({ setPage }) => {
+                                return ( <
+                                    div className = "p-8 max-w-6xl" >
+                                    <
+                                    h1 className = "text-3xl font-semibold tracking-tight" >
+                                    Welcome to < span className = "grad-text" > Lermet AI < /span> <
+                                    /h1> <
+                                    p className = "text-white/60 mt-2" > Your workspace for chat, agents, study, code and APIs. < /p> <
+                                    div className = "mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4" >
+                                    <
+                                    button onClick = {
+                                        () => setPage('chat') }
+                                    className = "glass p-6 hover:bg-white/[0.07] transition text-left" >
+                                    <
+                                    Icons.MessagesSquare className = "h-5 w-5 text-brand-cyan" />
+                                    <
+                                    div className = "mt-3 font-medium" > Open a chat < /div> <
+                                    p className = "text-white/60 text-sm" > Stream answers with markdown and code. < /p> <
+                                    /button> <
+                                    button onClick = {
+                                        () => setPage('agents') }
+                                    className = "glass p-6 hover:bg-white/[0.07] transition text-left" >
+                                    <
+                                    Icons.Bot className = "h-5 w-5 text-brand-cyan" />
+                                    <
+                                    div className = "mt-3 font-medium" > Build an agent < /div> <
+                                    p className = "text-white/60 text-sm" > Compose multi - step automations. < /p> <
+                                    /button> <
+                                    div className = "glass p-6" >
+                                    <
+                                    Icons.Activity className = "h-5 w-5 text-brand-cyan" />
+                                    <
+                                    div className = "mt-3 font-medium" > Usage < /div> <
+                                    p className = "text-white/60 text-sm" > Analytics arrive in stage 2. < /p> <
+                                    /div> <
+                                    /div> <
+                                    /div>
+                                );
+                            };
+
+                            // ─── Chat Page ──────────────────────────────────────────────────
+                            const ChatPage = () => {
+                                const [messages, setMessages] = useState([]);
+                                const [input, setInput] = useState('');
+                                const [loading, setLoading] = useState(false);
+                                const endRef = useRef(null);
+
+                                useEffect(() => {
+                                    endRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                }, [messages]);
+
+                                const simulateResponse = async (userMsg) => {
+                                    setLoading(true);
+                                    await new Promise(r => setTimeout(r, 800 + Math.random() * 700));
+                                    const responses = [
+                                        'That\'s a great question! Let me think about that for a moment. 🤔\n\nHere\'s what I can tell you: **Lermet AI** is designed to be your all-in-one workspace for intelligent creation. You can chat, build agents, study, code, and generate images — all in one place.\n\n```js\n// Example: using the Lermet API\nconst response = await lermet.chat({\n  model: "gpt-4",\n  messages: [{ role: "user", content: "Hello!" }]\n});\n```',
+                                        'I understand what you\'re asking. Let me break it down:\n\n1. **First**, the platform supports multiple AI models\n2. **Second**, you can switch between chat, agents, and study modes\n3. **Third**, everything syncs across your workspace\n\n> The future of AI is collaborative, and Lermet is built for that vision.',
+                                        'Great question! Here\'s a quick overview of what Lermet AI can do:\n\n- **Chat**: Streaming AI conversations with memory\n- **Agents**: Custom AI agents for specific tasks\n- **Study**: PDF analysis, flashcards, and quizzes\n- **Coding**: Code generation and debugging\n- **Image Gen**: Create visuals from text prompts\n\nWould you like me to elaborate on any of these?',
+                                        'That\'s a really interesting topic! Let me share some insights:\n\nLermet AI uses a modular architecture that allows us to add new capabilities without breaking existing ones. The system is built on:\n\n- Next.js 15 with React 19\n- Vercel AI SDK for streaming\n- Tailwind CSS for the UI\n- A plugin-based agent system\n\nThis means we can continuously improve and add new features.',
+                                    ];
+                                    const reply = responses[Math.floor(Math.random() * responses.length)];
+                                    setMessages(prev => [...prev, { id: Date.now() + 1, role: 'assistant', content: reply }]);
+                                    setLoading(false);
+                                };
+
+                                const handleSubmit = async (e) => {
+                                    e.preventDefault();
+                                    if (!input.trim() || loading) return;
+                                    const userMsg = { id: Date.now(), role: 'user', content: input.trim() };
+                                    setMessages(prev => [...prev, userMsg]);
+                                    setInput('');
+                                    await simulateResponse(userMsg.content);
+                                };
+
+                                return ( <
+                                    div className = "flex flex-col h-screen" >
+                                    <
+                                    header className = "px-6 py-4 border-b border-white/10 flex items-center gap-2" >
+                                    <
+                                    Icons.Sparkles className = "h-4 w-4 text-brand-cyan" />
+                                    <
+                                    h1 className = "font-medium" > AI Chat < /h1> <
+                                    /header>
+
+                                    <
+                                    div className = "flex-1 overflow-y-auto px-6 py-8" >
+                                    <
+                                    div className = "max-w-3xl mx-auto space-y-6" > {
+                                        messages.length === 0 && ( <
+                                            div className = "text-center text-white/60 mt-20" >
+                                            <
+                                            div className = "grad-text text-3xl font-semibold animate-pulse-glow" >
+                                            How can I help today?
+                                            <
+                                            /div> <
+                                            p className = "mt-2 text-sm" > Ask anything—code, study, ideas. < /p> <
+                                            /div>
+                                        )
+                                    } {
+                                        messages.map(m => ( <
+                                            div key = { m.id }
+                                            className = { m.role === 'user' ? 'flex justify-end' : '' } >
+                                            <
+                                            div className = {
+                                                m.role === 'user' ?
+                                                'max-w-[80%] rounded-2xl px-4 py-2.5 bg-lermet-gradient text-white shadow-glow' :
+                                                'prose prose-invert max-w-none text-white/90 markdown-content'
+                                            } >
+                                            {
+                                                m.role === 'user' ? < span > { m.content } < /span> :
+                                                    <
+                                                    div dangerouslySetInnerHTML = {
+                                                        {
+                                                            __html: m.content
+                                                                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                                                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                                                                .replace(/```(\w+)?\n([\s\S]*?)```/g,
+                                                                    '<pre><code>$2</code></pre>'
+                                                                )
+                                                                .replace(/^&gt; (.*)$/gm, '<blockquote>$1</blockquote>')
+                                                                .replace(/^- (.*)$/gm, '<li>$1</li>')
+                                                                .replace(/<li>.*?<\/li>/g, (m) =>
+                                                                    `<ul>${m}</ul>`.replace(/<\/ul><ul>/g, '')
+                                                                )
+                                                                .replace(/\n/g, '<br />')
+                                                        }
+                                                    }
+                                                    />
+                                            } <
+                                            /div> <
+                                            /div>
+                                        ))
+                                    } {
+                                        loading && ( <
+                                            div className = "flex items-center gap-2 text-white/50 text-sm" >
+                                            Thinking
+                                            <
+                                            span className = "typing-dots flex" >
+                                            <
+                                            span > < /span> <
+                                            span > < /span> <
+                                            span > < /span> <
+                                            /span> <
+                                            /div>
+                                        )
+                                    } <
+                                    div ref = { endRef }
+                                    /> <
+                                    /div> <
+                                    /div>
+
+                                    <
+                                    form onSubmit = { handleSubmit }
+                                    className = "border-t border-white/10 p-4" >
+                                    <
+                                    div className = "max-w-3xl mx-auto glass-strong flex items-end gap-2 p-2" >
+                                    <
+                                    textarea value = { input }
+                                    onChange = {
+                                        (e) => setInput(e.target.value) }
+                                    placeholder = "Message Lermet AI…"
+                                    rows = "1"
+                                    className = "flex-1 bg-transparent resize-none outline-none px-3 py-2 text-sm"
+                                    onKeyDown = {
+                                        (e) => {
+                                            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault();
+                                                handleSubmit(e); }
+                                        }
+                                    }
+                                    /> <
+                                    button type = "submit"
+                                    disabled = { loading || !input.trim() }
+                                    className = "btn-primary py-2 disabled:opacity-50" >
+                                    <
+                                    Icons.Send className = "h-4 w-4" />
+                                    <
+                                    /button> <
+                                    /div> <
+                                    /form> <
+                                    /div>
+                                );
+                            };
+
+                            // ─── Stub Pages ────────────────────────────────────────────────
+                            const StubPage = ({ title }) => {
+                                return ( <
+                                    div className = "p-8 max-w-4xl" >
+                                    <
+                                    h1 className = "text-3xl font-semibold tracking-tight" > { title } < /h1> <
+                                    p className = "text-white/60 mt-2" > This workspace ships in a future stage.The shell,
+                                    routing, and design system are wired and ready. < /p> <
+                                    div className = "glass p-6 mt-8" >
+                                    <
+                                    div className = "text-sm uppercase tracking-wider text-white/50" > Coming soon < /div> <
+                                    ul className = "mt-3 space-y-2 text-white/80 text-sm list-disc pl-5" >
+                                    <
+                                    li > Production UI for { title } < /li> <
+                                    li > Persistent storage + API < /li> <
+                                    li > Realtime collaboration < /li> <
+                                    /ul> <
+                                    /div> <
+                                    /div>
+                                );
+                            };
+
+                            // ─── Dashboard Layout ──────────────────────────────────────────
+                            const DashboardLayout = ({ page, setPage }) => {
+                                const [open, setOpen] = useState(true);
+                                let content;
+                                switch (page) {
+                                    case 'dashboard':
+                                        content = < DashboardHome setPage = { setPage }
+                                        />;
+                                        break;
+                                    case 'chat':
+                                        content = < ChatPage / > ;
+                                        break;
+                                    case 'agents':
+                                        content = < StubPage title = "Agents" / > ;
+                                        break;
+                                    case 'study':
+                                        content = < StubPage title = "Study" / > ;
+                                        break;
+                                    case 'coding':
+                                        content = < StubPage title = "Coding" / > ;
+                                        break;
+                                    case 'api':
+                                        content = < StubPage title = "API" / > ;
+                                        break;
+                                    case 'settings':
+                                        content = < StubPage title = "Settings" / > ;
+                                        break;
+                                    default:
+                                        content = < DashboardHome setPage = { setPage }
+                                        />;
+                                }
+                                return ( <
+                                    div className = "min-h-screen flex bg-bg neural-bg" >
+                                    <
+                                    Sidebar currentPage = { page }
+                                    setPage = { setPage }
+                                    open = { open }
+                                    setOpen = { setOpen }
+                                    /> <
+                                    main className = "flex-1 min-w-0" > { content } < /main> <
+                                    /div>
+                                );
+                            };
+
+                            // ─── Auth Pages ──────────────────────────────────────────────────
+                            const AuthPage = ({ type }) => {
+                                return ( <
+                                    div className = "min-h-screen flex items-center justify-center neural-bg px-4" >
+                                    <
+                                    div className = "glass-strong p-8 max-w-md w-full reveal"
+                                    ref = { useReveal() } >
+                                    <
+                                    div className = "text-center mb-8" >
+                                    <
+                                    Logo size = { 40 }
+                                    />
+                                    <
+                                    h2 className = "text-2xl font-semibold mt-4" > { type === 'login' ? 'Welcome back' :
+                                        'Create account' } < /h2> <
+                                    p className = "text-white/60 text-sm mt-1" > {
+                                        type === 'login' ? 'Sign in to your Lermet AI workspace' :
+                                            'Start your journey with Lermet AI'
+                                    } < /p> <
+                                    /div> <
+                                    div className = "space-y-4" >
+                                    <
+                                    input type = "email"
+                                    placeholder = "Email"
+                                    className = "w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 outline-none focus:border-brand-500 transition" /
+                                    >
+                                    <
+                                    input type = "password"
+                                    placeholder = "Password"
+                                    className = "w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/40 outline-none focus:border-brand-500 transition" /
+                                    >
+                                    <
+                                    button className = "btn-primary w-full justify-center" > { type === 'login' ? 'Sign in' :
+                                        'Create account' } < /button> <
+                                    /div> <
+                                    p className = "text-center text-white/50 text-sm mt-4" >
+                                    { type === 'login' ? "Don't have an account?" : "Already have an account?" }
+                                    <
+                                    span className = "text-brand-cyan hover:underline cursor-pointer" > { type === 'login' ?
+                                            ' Sign up' : ' Log in' } < /span> <
+                                    /p> <
+                                    /div> <
+                                    /div>
+                                );
+                            };
+
+                            // ─── Main App ─────────────────────────────────────────────────────
+                            const App = () => {
+                                const [page, setPage] = useState('landing');
+
+                                useEffect(() => {
+                                    const handleHash = () => {
+                                        const hash = window.location.hash.replace('#', '');
+                                        if (['features', 'pricing', 'faq'].includes(hash)) {
+                                            const el = document.getElementById(hash);
+                                            if (el) el.scrollIntoView({ behavior: 'smooth' });
+                                        }
+                                    };
+                                    window.addEventListener('hashchange', handleHash);
+                                    handleHash();
+                                    return () => window.removeEventListener('hashchange', handleHash);
+                                }, []);
+
+                                if (page === 'landing') {
+                                    return < LandingPage setPage = { setPage }
+                                    />;
+                                }
+                                if (page === 'login' || page === 'signup') {
+                                    return < AuthPage type = { page }
+                                    />;
+                                }
+                                return < DashboardLayout page = { page }
+                                setPage = { setPage }
+                                />;
+                            };
+
+                            // ─── Render ──────────────────────────────────────────────────────
+                            const root = ReactDOM.createRoot(document.getElementById('root'));
+                            root.render( < App / > );
+    </script>
+</body>
+  </html>
